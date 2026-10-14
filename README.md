@@ -20,7 +20,7 @@ GitHub Pages serves the repository root on `main`. `.nojekyll` enables direct st
 
 ## Content accuracy
 
-The 2025 paper is labeled an arXiv preprint; the INDICON 2026 manuscript is labeled under review. Only GridWorld is advertised as a live browser demo. Animated retinal workflows use DRIVE_AV reference annotations, not model predictions. CLAHE is applied to the sample green channel with clip limit 2 and an 8 × 8 tile grid. The vessel measurement is a minimum chord through a selected reference-mask pixel at preview resolution (4.5 px); it is not a clinical caliber estimate. GridWorld values and Durand–Kerner iterations are computed in the browser. Each tile supports pause/play and manual stage selection, respects reduced-motion preferences, and pauses offscreen. The portrait loads the current GitHub avatar. Company-confidential implementation details and unverified performance claims are omitted.
+The 2025 paper is labeled an arXiv preprint. Only GridWorld is advertised as a live browser demo. Animated retinal workflows use DRIVE_AV reference annotations, not model predictions. CLAHE is applied to the sample green channel with clip limit 2 and an 8 × 8 tile grid. The vessel measurement is a minimum chord through a selected reference-mask pixel at preview resolution (4.5 px); it is not a clinical caliber estimate. GridWorld values and Durand–Kerner iterations are computed in the browser. Each tile supports pause/play and manual stage selection, respects reduced-motion preferences, and pauses offscreen. The portrait loads the current GitHub avatar. Company-confidential implementation details and unverified performance claims are omitted.
 
 ## Sample provenance
 
