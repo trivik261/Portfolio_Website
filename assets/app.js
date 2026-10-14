@@ -80,6 +80,11 @@ function drawMeasurement(workflow,stage) {
   if(stage===3){const [a,b]=[measurement.from,measurement.to];svg.innerHTML+=`<path d="M${ox+a[0]*sc} ${oy+a[1]*sc}L${ox+b[0]*sc} ${oy+b[1]*sc}" stroke="#fff" stroke-width="2"/><path d="M${cx+14} ${cy-8}L${cx+45} ${cy-38}" stroke="#f3cf91"/><text x="${cx+47}" y="${cy-38}" fill="#f3cf91" font-size="12" font-family="monospace">${measurement.width.toFixed(1)} px</text>`;}
   workflow.querySelector('.workflow-screen').append(svg);
 }
+function paintScene(ctx,kind,stage,tick) {
+  if(kind==='rl')drawGrid(ctx,stage,tick);
+  else if(kind==='roots')drawRoots(ctx,stage,tick);
+  else window.projectScenes.draw(ctx,kind,stage,tick);
+}
 document.querySelectorAll('[data-workflow]').forEach(workflow=>{
   const kind=workflow.dataset.workflow,buttons=[...workflow.querySelectorAll('[data-step]')],play=workflow.querySelector('.play-toggle'),image=workflow.querySelector('.workflow-image'),canvas=workflow.querySelector('canvas'),ctx=canvas?.getContext('2d');
   let stage=0,tick=0,playing=!reducedMotion.matches,visible=false,previous=0,imageVersion=0;
@@ -88,7 +93,7 @@ document.querySelectorAll('[data-workflow]').forEach(workflow=>{
     workflow.querySelector('.stage-title').textContent=buttons[stage].textContent;
     workflow.querySelector('.step-counter').textContent=`${String(stage+1).padStart(2,'0')} / ${String(buttons.length).padStart(2,'0')}`;
     if(image){const index=kind==='segmentation'?stage:stage===0?0:2;const [src,alt]=retinalSteps[index];image.src=`assets/${src}`;image.alt=alt;if(kind==='measurement')drawMeasurement(workflow,stage);}
-    if(ctx)(kind==='rl'?drawGrid:drawRoots)(ctx,stage,tick);
+    if(ctx)paintScene(ctx,kind,stage,tick);
   }
   function playback(){workflow.classList.toggle('paused',!playing);play.textContent=playing?'Ⅱ':'▶';play.setAttribute('aria-label',`${playing?'Pause':'Play'} ${kind} animation`);}
   buttons.forEach((b,i)=>b.addEventListener('click',()=>{stage=i;tick=0;previous=performance.now();playing=false;imageVersion++;image?.classList.remove('changing');render();playback();}));
@@ -98,11 +103,12 @@ document.querySelectorAll('[data-workflow]').forEach(workflow=>{
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;previous=performance.now();},{threshold:.15}).observe(workflow);
   let lastTick=0;
   function frame(time){
-    if(playing&&visible&&!document.hidden){if(!previous)previous=time;if(time-lastTick>280){tick++;lastTick=time;if(ctx)(kind==='rl'?drawGrid:drawRoots)(ctx,stage,tick);}
+    if(playing&&visible&&!document.hidden){if(!previous)previous=time;if(time-lastTick>280){tick++;lastTick=time;if(ctx)paintScene(ctx,kind,stage,tick);}
       if(time-previous>=2400){stage=(stage+1)%buttons.length;tick=0;previous=time;if(image&&!reducedMotion.matches){const version=++imageVersion;image.classList.add('changing');setTimeout(()=>{if(version===imageVersion){render();image.classList.remove('changing');}},180);}else render();}}
     else previous=time;
     requestAnimationFrame(frame);
   }
   document.addEventListener('visibilitychange',()=>{previous=performance.now();});
+  document.addEventListener('project-data-ready',render);
   render();playback();requestAnimationFrame(frame);
 });
