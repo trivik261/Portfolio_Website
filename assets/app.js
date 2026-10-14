@@ -72,9 +72,9 @@ function drawRoots(ctx,stage,tick) {
 function drawMeasurement(workflow,stage) {
   workflow.querySelector('.measurement-mark')?.remove();
   if(stage<2)return;
-  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('measurement-mark');svg.setAttribute('viewBox','0 0 500 256');
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('measurement-mark');const screenWidth=workflow.querySelector('.workflow-screen').clientWidth;svg.setAttribute('viewBox',`0 0 ${screenWidth} 256`);
   // Match the centered 248 × 256 image displayed at height 220.
-  const sc=220/256,ox=(500-248*sc)/2,oy=18;
+  const sc=220/256,ox=(screenWidth-248*sc)/2,oy=18;
   const [x,y]=measurement.center;const cx=ox+x*sc,cy=oy+y*sc;
   svg.innerHTML=`<circle cx="${cx}" cy="${cy}" r="13" fill="none" stroke="#f3cf91" stroke-width="1.5"/><path d="M${cx-20} ${cy}h40 M${cx} ${cy-20}v40" stroke="#f3cf91" opacity=".5"/>`;
   if(stage===3){const [a,b]=[measurement.from,measurement.to];svg.innerHTML+=`<path d="M${ox+a[0]*sc} ${oy+a[1]*sc}L${ox+b[0]*sc} ${oy+b[1]*sc}" stroke="#fff" stroke-width="2"/><path d="M${cx+14} ${cy-8}L${cx+45} ${cy-38}" stroke="#f3cf91"/><text x="${cx+47}" y="${cy-38}" fill="#f3cf91" font-size="12" font-family="monospace">${measurement.width.toFixed(1)} px</text>`;}
