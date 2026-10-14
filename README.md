@@ -12,7 +12,7 @@ From the repository root:
 python -m http.server 8000
 ```
 
-Open http://localhost:8000. The current site uses `index.html`, `assets/style.css`, `assets/app.js`, and `images/profile.jpeg`. No npm install or build is needed.
+Open http://localhost:8000. The current site uses `index.html`, `assets/style.css`, `assets/app.js`, and the workflow images in `assets/`. No npm install or build is needed.
 
 ## Deployment
 
@@ -20,4 +20,8 @@ GitHub Pages serves the repository root on `main`. `.nojekyll` enables direct st
 
 ## Content accuracy
 
-The 2025 paper is labeled an arXiv preprint; the INDICON 2026 manuscript is labeled under review. Only GridWorld is advertised as a live browser demo. Project illustrations are conceptual rather than model outputs. Company-confidential implementation details and unverified performance claims are omitted.
+The 2025 paper is labeled an arXiv preprint; the INDICON 2026 manuscript is labeled under review. Only GridWorld is advertised as a live browser demo. Animated retinal workflows use DRIVE_AV reference annotations, not model predictions. CLAHE is applied to the sample green channel with clip limit 2 and an 8 × 8 tile grid. The vessel measurement is a minimum chord through a selected reference-mask pixel at preview resolution (4.5 px); it is not a clinical caliber estimate. GridWorld values and Durand–Kerner iterations are computed in the browser. Each tile supports pause/play and manual stage selection, respects reduced-motion preferences, and pauses offscreen. The portrait loads the current GitHub avatar. Company-confidential implementation details and unverified performance claims are omitted.
+
+## Sample provenance
+
+The fundus image and artery/vein labels are derived from `Dataset/DRIVE_AV/test/images/DRIVE0.png` and `Dataset/DRIVE_AV/test/label/DRIVE0.png` in [the public segmentation repository](https://github.com/trivik261/AVSegmentation-SWIN_ATT_WNET/tree/main/Dataset/DRIVE_AV/test). Masks are resized with nearest-neighbor interpolation. Red and blue labels are displayed as arteries and veins; green labels are preserved in the combined reference map.
